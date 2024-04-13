@@ -31,6 +31,7 @@ def inspect_text_loction(x: int, y: int, window: button.Text) -> None:
     """
     panduan = 0
     for i in window.Button:
+        #print(i.is_hover(x, y))
         if i.is_hover(x, y):
             i.flush_color((125, 125, 125))
             panduan = 1

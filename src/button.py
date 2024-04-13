@@ -50,6 +50,11 @@ class Text:
         down_points = (700, 700)
         self.yuan_window = cv.resize(self.yuan_window, down_points, interpolation=cv.INTER_LINEAR)
 
+    def print_all_Button_position(self):
+        for button in self.Button:
+            print(button.position + button.size)
+            print(button.is_hover(1,1))
+
 
 class Text_Button:
     def __init__(self, Textwindow: Text, text: str = '你好, XI GAL', color = (0,0,0), position = (0,0),
@@ -94,8 +99,10 @@ class Text_Button:
 
         x = self.position[0]
         y = self.position[1]
-        return (x <= mouse_x <=  x + self.size[0] and
-                y <= mouse_y <=  y + self.size[1])
+        print(x <= mouse_x <= x + self.size[0] and
+                y <= mouse_y <= y + self.size[1])
+        return (x <= mouse_x <= x + self.size[0] and
+                y <= mouse_y <= y + self.size[1])
 
 
     def flush_color(self, new_color):
@@ -118,10 +125,79 @@ class Text_Button:
          self.click_operation()
         self.color = new_color
         self.draw()
-
-
 #文本型按钮类，给屏幕上增加一个指定大小的可交互文本按钮
 
+class long_text(Text_Button):
+    def __init__(self, Textwindow: Text, text: str = '你好, XI GAL', color = (0,0,0), position = (0,0),
+                 height: int = 30 , font_path: str = "..//font//simsun.ttf", click_operation: object = None ) -> None:
+        """
+
+                :param Textwindow: 需要写入按钮的窗口Text类
+                :param text: 需要写入的文本
+                :param color: 文本颜色
+                :param position: 写入的位置
+                :param height: 写入文本的高度
+                :param font_path: 写入文本的字体路径
+                :param click_operation: 当点击这个按钮时的触发函数
+                """
+        self.click_operation = click_operation
+        self.Textwindow = Textwindow
+        self.window = Textwindow.window
+        self.text = text
+        self.color = color
+        self.position = position
+        self.height = height
+        self.font_path = font_path
+        self.font = ImageFont.truetype(self.font_path, int(self.height * 0.8))
+        self.ft = PutChineseText(self.font_path, text_size=self.height)
+        self.Textwindow.add(self)
+        self.draw()
+
+    def draw(self, window=None) -> None:
+        if window is None:
+            window = self.window
+        x, y = self.position
+        self.size = self.ft.get_text_size(self.text)
+        print(self.position, self.size)
+        maxsize = self.window.shape
+        (max_width, max_height) = int(maxsize[1]*0.9), int(maxsize[0]*0.9)
+        print(max_width)
+        space_width, line_height = self.ft.get_text_size('汐')  # 空格宽度和行高
+        for char in self.text:
+            # 计算当前字符的宽度
+            size = self.ft.get_text_size(char)
+            #char_width, _ = draw.textsize(char, font=self.font_path)
+
+            # 检查是否需要换行
+            print(x+size[0])
+            if x + size[0] >= max_width:
+                x = self.position[0]  # 重置到初始x坐标
+                y += line_height  # 移动到下一行
+
+            # 检查是否超出图片底部边界
+            if y + line_height > max_height:
+                break  # 超出边界，停止绘制
+
+            # 绘制字符
+            #draw.text((x, y), char, font=font)
+            window = self.ft.draw_text(window, (x, y), char, self.color)
+            x += size[0]  # 更新x坐标到下一个字符的位置
+
+
+    def is_hover(self, mouse_x, mouse_y):
+        return super().is_hover(mouse_x, mouse_y)
+
+    def flush_color(self, new_color):
+        super().flush_color(new_color)
+
+    def re_color(self, re_color):
+        super().re_color(re_color)
+
+    def click_color_alter(self,new_color):
+        super().click_color_alter(new_color)
+
+    def click_color_exe(self, new_color):
+        super().click_color_exe(new_color)
 
 class PutChineseText(object):
     def __init__(self, ttf, text_size):

@@ -37,8 +37,8 @@ if __name__ == '__main__':
     button.Text_Button(draw, '教程 The Question', (0, 0, 0), (50, 100), 30)
     button.Text_Button(draw, '+ 创建新项目', (0, 0, 0), (50, 150), 30)
     button.Text_Button(draw, '打开目录', (0, 0, 0), (50, 200), 30)
-    button.Text_Button(draw, '操作', (0, 0, 0), (50, 250), 30)
-    button.Text_Button(draw, '生成', (0, 0, 0), (50, 300), 30)
+    button.Text_Button(draw, '操作', (0, 0, 0), (50, 250), 30, click_operation=draw.print_all_Button_position)
+    button.long_text(draw, '生成audsiohdasfuhhhhhfffffffffffffffffffffffffffffff', (0, 0, 0), (50, 300), 30)
     button.Text_Button(draw, '更换图片', (0, 0, 0), (50, 350), 30, click_operation=draw.alter_the_image)
     button.Text_Button(draw, '退出', (0, 0, 0), (50, 400), 30, click_operation=runningevent.Forced_exit)
 
