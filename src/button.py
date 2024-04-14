@@ -26,11 +26,15 @@ class Text:
         self.window = window
         self.yuan_window = copy.deepcopy(window)
         self.Button = []
+        self.long = []
         self.Button_need_flush = []
         self.img_nums = 2
 
     def add(self, button: Text_Button) -> None:
-        self.Button.append(button)
+        if type(button) == Text_Button:
+            self.Button.append(button)
+        elif type(button) == long_text:
+            self.long.append(button)
 
     def add_need_flush(self, button: Text_Button) -> None:
         self.Button_need_flush.append(button)
@@ -39,15 +43,14 @@ class Text:
         self.window = copy.deepcopy(self.yuan_window)
 
         for button in self.Button:
-            if type(button) == Text_Button:
-                button.draw(self.window)
-            elif type(button) == long_text:
-                button.delay_draw(self.window)
+            button.draw(self.window)
+        for button in self.long:
+            button.delay_draw(self.window, speed=1)
         return self.window
     #def draw_flush(self):
     def alter_the_image(self) -> None:
         self.img_nums = self.img_nums + 1
-        img_path = '..//img//' + str(self.img_nums) + '.jpg'
+        img_path = '..//text_img//' + str(self.img_nums) + '.jpg'
         self.yuan_window = copy.deepcopy(cv.imread(img_path, 1))
         kernel = np.array([[0, -1, 0], [-1, 6, -1], [0, -1, 0]])  # 创建滤波器
         self.yuan_window = cv.filter2D(self.yuan_window, -1, kernel)  # 卷积
@@ -61,6 +64,11 @@ class Text:
                 print(button.position + button.size)
                 print(button.is_hover(1,1))
 
+    def long_text_draw_complete(self):
+        print('sadui')
+        for button in self.long:
+            button.count_text = len(button.text)
+            button.now_char = button.text
 
 class Text_Button:
     def __init__(self, Textwindow: Text, text: str = '你好, XI GAL', color = (0,0,0), position = (0,0),
@@ -190,13 +198,13 @@ class long_text(Text_Button):
             window = self.ft.draw_text(window, (x, y), char, self.color)
             x += size[0]  # 更新x坐标到下一个字符的位置
 
-    def delay_draw(self, window=None) -> bool:
+    def delay_draw(self, window=None, speed=1) -> bool:
         if window is None:
             window = self.window
 
         if not self.count_text == len(self.text):
-            self.now_char = self.text[0:self.count_text]
-            self.count_text += 1
+            self.now_char = self.text[0:int(self.count_text)+1]
+            self.count_text += speed
         self.draw(window)
         return self.window
 
@@ -260,8 +268,8 @@ class PutChineseText(object):
     def draw_string(self, img, x_pos, y_pos, text, color):
         '''
         draw string
-        :param x_pos: text x-postion on img
-        :param y_pos: text y-postion on img
+        :param x_pos: text x-postion on text_img
+        :param y_pos: text y-postion on text_img
         :param text:  text (unicode)
         :param color: text color
         :return:      image
@@ -272,7 +280,7 @@ class PutChineseText(object):
         self.pen.y = y_pos << 6
 
         image = img
-        #image = copy.deepcopy(img)
+        #image = copy.deepcopy(text_img)
 
         for cur_char in text:
             self._face.load_char(cur_char)

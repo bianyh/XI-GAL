@@ -16,7 +16,7 @@ if __name__ == '__main__':
     window_name = 'Xi Gal'
     cv.namedWindow(window_name)
     # 将OpenCV图像转换为PIL图像
-    image = cv.imread('..//img//2.jpg', 1)
+    image = cv.imread('../text_img//2.jpg', 1)
     kernel = np.array([[0,-1,0],[-1,6,-1],[0,-1,0]])#创建滤波器
     image = cv.filter2D(image, -1, kernel)  #卷积
     down_width = 500
@@ -38,10 +38,10 @@ if __name__ == '__main__':
     button.Text_Button(draw, '+ 创建新项目', (0, 0, 0), (50, 150), 30)
     button.Text_Button(draw, '打开目录', (0, 0, 0), (50, 200), 30)
     button.Text_Button(draw, '操作', (0, 0, 0), (50, 250), 30, click_operation=draw.print_all_Button_position)
-    button.long_text(draw, '生成audsiohdasfuhhhhhfffffffffffffffffffffffffffffff', (0, 0, 0), (50, 300), 30)
+    button.long_text(draw, '生成audsiohdasfuhhhhhfffffffffffssssssssssssfffffffa', (0, 0, 0), (50, 300), 30)
     button.Text_Button(draw, '更换图片', (0, 0, 0), (50, 350), 30, click_operation=draw.alter_the_image)
     button.Text_Button(draw, '退出', (0, 0, 0), (50, 400), 30, click_operation=runningevent.Forced_exit)
-
+    print(globals())
 
     while True:
         image = draw.draw_all()

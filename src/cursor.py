@@ -19,6 +19,7 @@ def mouse_evt(event: object, x: int, y: int, flags: object, param: object) -> No
        inspect_text_loction(x,y, param[0])
     if event == cv.EVENT_LBUTTONDOWN or event == cv.EVENT_LBUTTONDBLCLK:
         click_color_noexe(x, y, param[0])
+        param[0].long_text_draw_complete()
     elif event == cv.EVENT_LBUTTONUP:
         click_color_exe(x, y, param[0])
 
