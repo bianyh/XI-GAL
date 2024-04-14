@@ -5,11 +5,13 @@ Created on Fri Apr 12 16:57:49 2024
 @author: 11494
 """
 
+
 import cv2 as cv
 import numpy as np
 import cursor
 import button
 import runningevent
+import music
 
 if __name__ == '__main__':
     # 创建一个白色背景的窗口
@@ -38,9 +40,12 @@ if __name__ == '__main__':
     # button.Text_Button(draw, '+ 创建新项目', (0, 0, 0), (50, 150), 30)
     # button.Text_Button(draw, '打开目录', (0, 0, 0), (50, 200), 30)
     # button.Text_Button(draw, '操作', (0, 0, 0), (50, 250), 30, click_operation=draw.print_all_Button_position)
-    button.long_text(draw, '姐姐daisuki~~@青春放纵姐姐daisuki~~@青春放纵姐姐daisuki~~@青春放纵姐姐daisuki~~@青春放纵姐姐daisuki~~@青春放纵', (0, 0, 0), (120, 560), 30)
+    button.long_text(draw, '平等这个词本身就很虚伪，但我们人类是一种会思考的生物。也就是说，我们必须要让规则表面看上去是平等的。   ——绫小路清隆', (0, 0, 0), (120, 560), 30)
     button.Text_Button(draw, '更换图片', (0, 0, 0), (50, 350), 30, click_operation=draw.alter_the_image)
     button.Text_Button(draw, '退出', (0, 0, 0), (50, 400), 30, click_operation=runningevent.Forced_exit)
+
+    play_music = music.Music()
+    play_music.add_song(r'test_music/a.mp3', volume=0.1)
 
     while True:
         image = draw.draw_all()

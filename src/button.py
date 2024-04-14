@@ -49,7 +49,7 @@ class Text:
         for button in self.Button:
             button.draw(self.window)
         for button in self.long:
-            button.delay_draw(self.window, speed=1)
+            button.delay_draw(self.window, speed=0.7)
 
         return self.window
     #def draw_flush(self):
@@ -70,7 +70,6 @@ class Text:
                 print(button.is_hover(1,1))
 
     def long_text_draw_complete(self):
-        print('sadui')
         for button in self.long:
             button.count_text = len(button.text)
             button.now_char = button.text
@@ -81,6 +80,7 @@ class Text:
         alpha = 0.2  # Transparency factor.
         self.window = runningevent.addWeightedSmallImgToLargeImg(self.window, alpha, self.text_box, 1 - alpha, 0, regionTopLeftPos=top_left)
         # cv.rectangle(self.window, top_left, bottom_right, self.text_box_color, -1)
+
 
 class Text_Button:
     def __init__(self, Textwindow: Text, text: str = '你好, XI GAL', color = (0,0,0), position = (0,0),
