@@ -16,7 +16,7 @@ if __name__ == '__main__':
     window_name = 'Xi Gal'
     cv.namedWindow(window_name)
     # 将OpenCV图像转换为PIL图像
-    image = cv.imread('C://img//2.jpg', 1)
+    image = cv.imread('..//img//2.jpg', 1)
     kernel = np.array([[0,-1,0],[-1,6,-1],[0,-1,0]])#创建滤波器
     image = cv.filter2D(image, -1, kernel)  #卷积
     down_width = 500

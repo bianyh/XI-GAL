@@ -47,7 +47,7 @@ class Text:
     #def draw_flush(self):
     def alter_the_image(self) -> None:
         self.img_nums = self.img_nums + 1
-        img_path = 'C://img//' + str(self.img_nums) + '.jpg'
+        img_path = '..//img//' + str(self.img_nums) + '.jpg'
         self.yuan_window = copy.deepcopy(cv.imread(img_path, 1))
         kernel = np.array([[0, -1, 0], [-1, 6, -1], [0, -1, 0]])  # 创建滤波器
         self.yuan_window = cv.filter2D(self.yuan_window, -1, kernel)  # 卷积
