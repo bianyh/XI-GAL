@@ -19,11 +19,11 @@ if __name__ == '__main__':
     image = cv.imread('../text_img//2.jpg', 1)
     kernel = np.array([[0,-1,0],[-1,6,-1],[0,-1,0]])#创建滤波器
     image = cv.filter2D(image, -1, kernel)  #卷积
-    down_width = 500
+    down_width = 1200
     size = image.shape
     w = size[1]  # 宽度
     h = size[0]  # 高度
-    down_height = 500#int(h * 500 / w)
+    down_height = 700#int(h * 500 / w)
     down_points = (down_width, down_height)
     image = cv.resize(image, down_points, interpolation=cv.INTER_LINEAR)
 
@@ -33,15 +33,14 @@ if __name__ == '__main__':
     
     # 在图像上绘制中文文本
     draw = button.Text(image)
-    button.Text_Button(draw, 'xigal，启动！', (0, 0, 0), (50, 50), 30)
-    button.Text_Button(draw, '教程 The Question', (0, 0, 0), (50, 100), 30)
-    button.Text_Button(draw, '+ 创建新项目', (0, 0, 0), (50, 150), 30)
-    button.Text_Button(draw, '打开目录', (0, 0, 0), (50, 200), 30)
-    button.Text_Button(draw, '操作', (0, 0, 0), (50, 250), 30, click_operation=draw.print_all_Button_position)
-    button.long_text(draw, '生成audsiohdasfuhhhhhfffffffffffssssssssssssfffffffa', (0, 0, 0), (50, 300), 30)
+    # button.Text_Button(draw, 'xigal，启动！', (0, 0, 0), (50, 50), 30)
+    # button.Text_Button(draw, '教程 The Question', (0, 0, 0), (50, 100), 30)
+    # button.Text_Button(draw, '+ 创建新项目', (0, 0, 0), (50, 150), 30)
+    # button.Text_Button(draw, '打开目录', (0, 0, 0), (50, 200), 30)
+    # button.Text_Button(draw, '操作', (0, 0, 0), (50, 250), 30, click_operation=draw.print_all_Button_position)
+    button.long_text(draw, '姐姐daisuki~~@青春放纵姐姐daisuki~~@青春放纵姐姐daisuki~~@青春放纵姐姐daisuki~~@青春放纵姐姐daisuki~~@青春放纵', (0, 0, 0), (120, 560), 30)
     button.Text_Button(draw, '更换图片', (0, 0, 0), (50, 350), 30, click_operation=draw.alter_the_image)
     button.Text_Button(draw, '退出', (0, 0, 0), (50, 400), 30, click_operation=runningevent.Forced_exit)
-    print(globals())
 
     while True:
         image = draw.draw_all()

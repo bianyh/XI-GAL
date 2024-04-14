@@ -11,7 +11,7 @@ import freetype
 import copy
 import cv2 as cv
 import numpy as np
-
+import runningevent
 class Text_Button:
     pass
 
@@ -29,6 +29,10 @@ class Text:
         self.long = []
         self.Button_need_flush = []
         self.img_nums = 2
+        img_path = './/test_img//text_box.png'
+        self.text_box = cv.imread(img_path, 1)
+        down_points = (int(self.window.shape[1] * 0.9), int(self.window.shape[0] * 0.3))
+        self.text_box = cv.resize(self.text_box, down_points, interpolation=cv.INTER_LINEAR)
 
     def add(self, button: Text_Button) -> None:
         if type(button) == Text_Button:
@@ -41,11 +45,12 @@ class Text:
 
     def draw_all(self):
         self.window = copy.deepcopy(self.yuan_window)
-
+        self.Text_box()
         for button in self.Button:
             button.draw(self.window)
         for button in self.long:
             button.delay_draw(self.window, speed=1)
+
         return self.window
     #def draw_flush(self):
     def alter_the_image(self) -> None:
@@ -54,7 +59,7 @@ class Text:
         self.yuan_window = copy.deepcopy(cv.imread(img_path, 1))
         kernel = np.array([[0, -1, 0], [-1, 6, -1], [0, -1, 0]])  # 创建滤波器
         self.yuan_window = cv.filter2D(self.yuan_window, -1, kernel)  # 卷积
-        down_points = (700, 700)
+        down_points = (1200, 700)
         self.yuan_window = cv.resize(self.yuan_window, down_points, interpolation=cv.INTER_LINEAR)
 
 
@@ -69,6 +74,13 @@ class Text:
         for button in self.long:
             button.count_text = len(button.text)
             button.now_char = button.text
+
+    def Text_box(self):
+        size = self.window.shape
+        top_left = (int(size[1] * 0.05), int(size[0] * 0.7))
+        alpha = 0.2  # Transparency factor.
+        self.window = runningevent.addWeightedSmallImgToLargeImg(self.window, alpha, self.text_box, 1 - alpha, 0, regionTopLeftPos=top_left)
+        # cv.rectangle(self.window, top_left, bottom_right, self.text_box_color, -1)
 
 class Text_Button:
     def __init__(self, Textwindow: Text, text: str = '你好, XI GAL', color = (0,0,0), position = (0,0),
