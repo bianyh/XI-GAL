@@ -37,8 +37,12 @@ class Text:
 
     def draw_all(self):
         self.window = copy.deepcopy(self.yuan_window)
+
         for button in self.Button:
-            button.draw(self.window)
+            if type(button) == Text_Button:
+                button.draw(self.window)
+            elif type(button) == long_text:
+                button.delay_draw(self.window)
         return self.window
     #def draw_flush(self):
     def alter_the_image(self) -> None:
@@ -50,10 +54,12 @@ class Text:
         down_points = (700, 700)
         self.yuan_window = cv.resize(self.yuan_window, down_points, interpolation=cv.INTER_LINEAR)
 
+
     def print_all_Button_position(self):
         for button in self.Button:
-            print(button.position + button.size)
-            print(button.is_hover(1,1))
+            if type(button) == Text_Button:
+                print(button.position + button.size)
+                print(button.is_hover(1,1))
 
 
 class Text_Button:
@@ -80,7 +86,7 @@ class Text_Button:
         self.font = ImageFont.truetype(self.font_path, int(self.height * 0.8))
         self.ft = PutChineseText(self.font_path,text_size=self.height)
         self.Textwindow.add(self)
-        self.draw()
+        self.draw(self.window)
 
     def draw(self, window=None) -> None:
         #position渴求一个元组，以代表文本镶嵌的起始位置
@@ -93,14 +99,15 @@ class Text_Button:
         self.size = self.ft.get_text_size(self.text)
         # 在指定位置绘制文本
         window = self.ft.draw_text(window, self.position, self.text, self.color)
+        return window
 
     def is_hover(self, mouse_x, mouse_y):
         # 检查鼠标坐标是否在文本框内
 
         x = self.position[0]
         y = self.position[1]
-        print(x <= mouse_x <= x + self.size[0] and
-                y <= mouse_y <= y + self.size[1])
+        # print(x <= mouse_x <= x + self.size[0] and
+        #         y <= mouse_y <= y + self.size[1])
         return (x <= mouse_x <= x + self.size[0] and
                 y <= mouse_y <= y + self.size[1])
 
@@ -150,42 +157,55 @@ class long_text(Text_Button):
         self.font_path = font_path
         self.font = ImageFont.truetype(self.font_path, int(self.height * 0.8))
         self.ft = PutChineseText(self.font_path, text_size=self.height)
+        self.count_text = 0
+        self.maxsize = self.window.shape
+        (self.max_width, self.max_height) = int(self.maxsize[1] * 0.9), int(self.maxsize[0] * 0.9)
+        self.space_width, self.line_height = self.ft.get_text_size('汐')  # 空格宽度和行高
         self.Textwindow.add(self)
-        self.draw()
+        self.delay_draw(self.window)
 
     def draw(self, window=None) -> None:
         if window is None:
             window = self.window
+        #self.size = self.ft.get_text_size(self.text)#长文本不需要检验距离
+        #print(self.position, self.size)
+
+        #print(max_width)
+
         x, y = self.position
-        self.size = self.ft.get_text_size(self.text)
-        print(self.position, self.size)
-        maxsize = self.window.shape
-        (max_width, max_height) = int(maxsize[1]*0.9), int(maxsize[0]*0.9)
-        print(max_width)
-        space_width, line_height = self.ft.get_text_size('汐')  # 空格宽度和行高
-        for char in self.text:
+#        print(self.now_char)
+        for char in self.now_char:
             # 计算当前字符的宽度
             size = self.ft.get_text_size(char)
             #char_width, _ = draw.textsize(char, font=self.font_path)
-
             # 检查是否需要换行
-            print(x+size[0])
-            if x + size[0] >= max_width:
+            if x + size[0] >= self.max_width:
                 x = self.position[0]  # 重置到初始x坐标
-                y += line_height  # 移动到下一行
-
+                y += self.line_height  # 移动到下一行
             # 检查是否超出图片底部边界
-            if y + line_height > max_height:
+            if y + self.line_height > self.max_height:
                 break  # 超出边界，停止绘制
-
             # 绘制字符
             #draw.text((x, y), char, font=font)
             window = self.ft.draw_text(window, (x, y), char, self.color)
             x += size[0]  # 更新x坐标到下一个字符的位置
 
+    def delay_draw(self, window=None) -> bool:
+        if window is None:
+            window = self.window
+
+        if not self.count_text == len(self.text):
+            self.now_char = self.text[0:self.count_text]
+            self.count_text += 1
+        self.draw(window)
+        return self.window
+
+
+
 
     def is_hover(self, mouse_x, mouse_y):
-        return super().is_hover(mouse_x, mouse_y)
+        return False
+        #return super().is_hover(mouse_x, mouse_y)
 
     def flush_color(self, new_color):
         super().flush_color(new_color)

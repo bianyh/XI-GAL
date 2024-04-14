@@ -23,7 +23,7 @@ if __name__ == '__main__':
     size = image.shape
     w = size[1]  # 宽度
     h = size[0]  # 高度
-    down_height = int(h * 500 / w)
+    down_height = 500#int(h * 500 / w)
     down_points = (down_width, down_height)
     image = cv.resize(image, down_points, interpolation=cv.INTER_LINEAR)
 
@@ -52,7 +52,7 @@ if __name__ == '__main__':
         cv.setMouseCallback(window_name, cursor.mouse_evt,[draw])
         # 显示窗口
         cv.imshow(window_name, image)
-        cv.waitKey(60)
+        cv.waitKey(1)
         if cv.waitKey(1) & 0xFF == ord('q'):
             cv.destroyAllWindows()
             break
